@@ -146,10 +146,20 @@ class App extends React.Component {
                   <label className={item.done ? "done" : ""}>
                     {item.text} {item.dueDate ? `(Due on: ${item.dueDate})` : ""}
                   </label>
-                  <button onClick={() => this.editTask(index)}>Edit</button>
-                  <button onClick={() => this.removeTask(index)}>Delete</button>
-                  <button onClick={() => this.moveTaskUp(index)} disabled={index === 0}>Move Up</button>
-                  <button onClick={() => this.moveTaskDown(index)} disabled={index === this.state.items.length - 1}>Move Down</button>
+                  <img
+                      id="edit"
+                      src="https://logowik.com/content/uploads/images/888_edit.jpg"
+                      alt="edit"
+                      onClick={() => this.editTask(index)}
+                  />
+                  <img
+                      id="delete"
+                      src="https://static.vecteezy.com/system/resources/previews/010/366/194/original/bin-icon-transparent-bin-clipart-free-png.png"
+                      alt="delete"
+                      onClick={() => this.removeTask(index)}
+                  />
+                  <button onClick={() => this.moveTaskUp(index)} disabled={index === 0}>↑</button>
+                  <button onClick={() => this.moveTaskDown(index)} disabled={index === this.state.items.length - 1}>↓</button>
                 </li>
             ))}
           </ol>
