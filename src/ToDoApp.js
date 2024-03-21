@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Header from './Header';
+import Footer from "./Footer";
 
 class ToDoApp extends React.Component {
     constructor(props) {
@@ -9,11 +10,12 @@ class ToDoApp extends React.Component {
             items: [],
             newTaskText: ""
         };
+        this.addTask = this.addTask.bind(this);
     }
 
     componentDidMount() {
         const storedTasks = localStorage.getItem("tasks");
-        if (storedTasks!==null) {
+        if (storedTasks) {
             const loadTasksOnStart = window.confirm("Tasks found in localStorage. Would you like to load them?");
             if (loadTasksOnStart) {
                 this.setState({items: JSON.parse(storedTasks)});
@@ -122,6 +124,14 @@ class ToDoApp extends React.Component {
             return {items: updatedItems};
         });
     };
+
+    search = (searchText) => {
+        this.setState((prevState) => {
+            const updatedItems = [...prevState.items];
+            updatedItems.filter((item) => item.text.includes(searchText));
+            return {items: updatedItems};
+        });
+    }
 
     moveTaskDown = (index) => {
         if (index === this.state.items.length - 1) return;
@@ -256,7 +266,7 @@ class ToDoApp extends React.Component {
                         </li>
                     ))}
                 </ol>
-
+                <Footer addTask={this.addTask} search={this.search}/>
             </div>
         );
     }

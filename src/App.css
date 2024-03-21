@@ -1,41 +1,91 @@
 body {
-  padding: 20px;
-  font-family: "DejaVu Sans Condensed", serif;
-  background-color: white;
+    padding: 20px;
+    font-family: "DejaVu Sans Condensed", serif;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: rgb(238, 174, 202);
+    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
 }
 
 #app {
-  background: #fff;
-  border-radius: 4px;
-  padding: 20px;
-  transition: all 0.2s;
+    background: #fff;
+    border-radius: 4px;
+    padding: 20px;
+    transition: all 0.2s;
 }
 
 li {
-  margin: 8px 0;
+    margin: 8px 0;
+}
+
+h1 {
+    text-align: center;
 }
 
 h2 {
-  font-weight: bold;
-  margin-bottom: 15px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 .done {
-  color: rgba(0, 0, 0, 0.3);
-  text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.3);
+    text-decoration: line-through;
 }
 
 input {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 
 img {
-  width: 20px;
+    width: 20px;
 }
 
-.work{
-    background-color: #0000FF;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
+input[type="text"],
+input[type="date"],
+select,
+button {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+ol {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.done {
+    text-decoration: line-through;
+}
+
+#edit,
+#delete {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#edit:hover,
+#delete:hover {
+    opacity: 0.7;
 }

@@ -2,6 +2,9 @@ import * as React from "react";
 
 export default function Header({ nbTasks }) {
     return (
-        <div>Progression: {nbTasks}</div>
+        <div>
+            <h1>TouDou: the ultimate To-do List</h1>
+            <p>Progression: {nbTasks}</p>
+        </div>
     );
 }
