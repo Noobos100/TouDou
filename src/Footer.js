@@ -1,12 +1,15 @@
 import React from "react";
 
-function Footer({ addTask, search }) {
+function Footer({ openAddPostModal, search }) {
     const handleClick = () => {
-        addTask(); // Call the addTask function when the button is clicked
+        openAddPostModal(); // Call the addTask function when the button is clicked
     };
 
     const handleSearch = (event) => {
-        search(event.target.value); // Call the search function with the value of the input
+        // if input size > 3, call search function
+        if (event.target.value.length > 3) {
+            search(event.target.value);
+        }
     };
 
     return (

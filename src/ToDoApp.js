@@ -2,13 +2,15 @@ import React from 'react';
 import './App.css';
 import Header from './Header';
 import Footer from "./Footer";
+import Modal from "./Modal";
 
 class ToDoApp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             items: [],
-            newTaskText: ""
+            newTaskText: "",
+            showAddPostModal: false
         };
         this.addTask = this.addTask.bind(this);
     }
@@ -42,7 +44,6 @@ class ToDoApp extends React.Component {
         this.setState({newTaskText: event.target.value});
     };
 
-    // add Task using React Modal
     addTask = () => {
         const {newTaskText} = this.state;
         if (newTaskText.trim() !== "") {
@@ -125,14 +126,6 @@ class ToDoApp extends React.Component {
         });
     };
 
-    search = (searchText) => {
-        this.setState((prevState) => {
-            const updatedItems = [...prevState.items];
-            updatedItems.filter((item) => item.text.includes(searchText));
-            return {items: updatedItems};
-        });
-    }
-
     moveTaskDown = (index) => {
         if (index === this.state.items.length - 1) return;
         this.setState((prevState) => {
@@ -157,29 +150,25 @@ class ToDoApp extends React.Component {
                 updatedItems.sort((a, b) => b.text.localeCompare(a.text));
                 return {items: updatedItems};
             });
-        }
-        else if (order === "dueDateAsc") {
+        } else if (order === "dueDateAsc") {
             this.setState((prevState) => {
                 const updatedItems = [...prevState.items];
                 updatedItems.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
                 return {items: updatedItems};
             });
-        }
-        else if (order === "dueDateDesc") {
+        } else if (order === "dueDateDesc") {
             this.setState((prevState) => {
                 const updatedItems = [...prevState.items];
                 updatedItems.sort((a, b) => b.dueDate.localeCompare(a.dueDate));
                 return {items: updatedItems};
             });
-        }
-        else if (order === "categoryAsc") {
+        } else if (order === "categoryAsc") {
             this.setState((prevState) => {
                 const updatedItems = [...prevState.items];
                 updatedItems.sort((a, b) => a.category.localeCompare(b.category));
                 return {items: updatedItems};
             });
-        }
-        else if (order === "categoryDesc") {
+        } else if (order === "categoryDesc") {
             this.setState((prevState) => {
                 const updatedItems = [...prevState.items];
                 updatedItems.sort((a, b) => b.category.localeCompare(a.category));
@@ -188,42 +177,52 @@ class ToDoApp extends React.Component {
         }
     }
 
+    openAddPostModal = () => { // Step 2
+        this.setState({showAddPostModal: true});
+    };
+
+    closeAddPostModal = () => { // Step 3
+        this.setState({showAddPostModal: false});
+    };
+
     // TODO: clean up structure (move functions to separate file)
     // TODO: add search bar
     render() {
         const nbTasks = this.countTasks();
-        const {newTaskText} = this.state;
-
+        const {newTaskText, showAddPostModal} = this.state;
         return (
             <div className="App">
                 <Header nbTasks={nbTasks}/>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Task name..."
-                        value={newTaskText}
-                        onChange={this.handleNewTaskChange}
-                    />
-                    <label for="datePicker">Due date (optional): </label>
-                    <input type="date" id="datePicker" name="datePicker"/>
+                <Modal closeModal={this.closeAddPostModal} show={showAddPostModal}>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Task name..."
+                            value={newTaskText}
+                            onChange={this.handleNewTaskChange}
+                        />
+                        <label htmlFor="datePicker">Due date (optional): </label>
+                        <input type="date" id="datePicker" name="datePicker"/>
 
-                    <input type="button" id="deletetasks" value="Delete All Tasks"
-                           onClick={() => this.removeAllTasks()}/>
+                        <form action="#">Category: &nbsp;
+                            <select name="category" id="category">
+                                <option value="none">None</option>
+                                <option value="work">Work</option>
+                                <option value="personal">Personal</option>
+                                <option value="school">School</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </form>
 
-                    <form action="#">Category: &nbsp;
-                        <select name="category" id="category">
-                            <option value="none">None</option>
-                            <option value="work">Work</option>
-                            <option value="personal">Personal</option>
-                            <option value="school">School</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </form>
-
-                    <button onClick={this.addTask}>Add Task</button>
-                    <button onClick={this.loadFromLocalStorage}>Load Tasks</button>
-                    <button onClick={this.saveToLocalStorage}>Save Tasks</button>
-                </div>
+                        <button onClick={this.addTask}>Add Task</button>
+                    </div>
+                </Modal>
+                <button onClick={this.loadFromLocalStorage}>Load Tasks</button>
+                <br></br>
+                <button onClick={this.saveToLocalStorage}>Save Tasks</button>
+                <br></br>
+                <input type="button" id="deletetasks" value="Delete All Tasks" onClick={() => this.removeAllTasks()}/>
+                <br></br>
                 <select name="sort" id="sort" onChange={(e) => this.sortTasks(e.target.value)}>
                     <option value="">Sort by...</option>
                     <option value="asc">Name (A-Z)</option>
@@ -233,6 +232,7 @@ class ToDoApp extends React.Component {
                     <option value="categoryAsc">Category (A-Z)</option>
                     <option value="categoryDesc">Category (Z-A)</option>
                 </select>
+
                 <ol>
                     {this.state.items.map((item, index) => (
                         <li key={index}>
@@ -266,7 +266,7 @@ class ToDoApp extends React.Component {
                         </li>
                     ))}
                 </ol>
-                <Footer addTask={this.addTask} search={this.search}/>
+                <Footer openAddPostModal={this.openAddPostModal} search={this.search}/>
             </div>
         );
     }

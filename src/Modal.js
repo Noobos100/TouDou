@@ -1,12 +1,13 @@
 import React from "react";
 
-function Modal({ closeModal, children }) {
+function Modal({ closeModal, children, show }) {
+    const showHideClassName = show ? "modal display-block" : "modal display-none";
     return (
-        <div className="modal">
+        <div className={showHideClassName}>
             <div className="modal-content">
-        <span className="close" onClick={closeModal}>
+        <button className="close" onClick={closeModal}>
           &times;
-        </span>
+        </button>
                 {children}
             </div>
         </div>
