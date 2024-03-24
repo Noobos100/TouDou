@@ -215,6 +215,7 @@ class ToDoApp extends React.Component {
         const {newTaskText, showAddPostModal, hideDoneTasks, searchedItems} = this.state;
         const itemsToDisplay = searchedItems && searchedItems.length > 0 ? searchedItems : this.state.items;
         const visibleItems = itemsToDisplay.filter(item => hideDoneTasks ? !item.done : true);
+        const currentDate = new Date().toISOString().split('T')[0];
         return (
             <div className="App">
                 <Header nbTasks={nbTasks}/>
@@ -275,7 +276,8 @@ class ToDoApp extends React.Component {
                                 checked={item.done}
                                 onChange={() => this.handleToggleDone(item.id)}
                             />
-                            <label className={item.done ? "done" : ""}>
+                            <label
+                                className={item.done ? "done" : (item.dueDate ? (item.dueDate < currentDate ? "overdue" : "") : "")}>
                                 {item.text} {item.dueDate ? `(Due on: ${item.dueDate})` : ""}
                                 {item.category ? `(Category: ${item.category})` : ""}
                                 {item.category === 'work' && <WorkIcon/>}
