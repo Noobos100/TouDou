@@ -3,6 +3,9 @@ import './App.css';
 import Header from './Header';
 import Footer from "./Footer";
 import Modal from "./Modal";
+import WorkIcon from '@mui/icons-material/Work';
+import SchoolIcon from '@mui/icons-material/School';
+import PersonIcon from '@mui/icons-material/Person';
 
 class ToDoApp extends React.Component {
     constructor(props) {
@@ -45,6 +48,7 @@ class ToDoApp extends React.Component {
         this.setState({newTaskText: event.target.value});
     };
 
+    // close modal after adding task
     addTask = () => {
         const {newTaskText} = this.state;
         if (newTaskText.trim() !== "") {
@@ -58,6 +62,7 @@ class ToDoApp extends React.Component {
                 }],
                 newTaskText: ""
             }));
+            this.closeAddPostModal();
         }
     };
 
@@ -227,9 +232,9 @@ class ToDoApp extends React.Component {
                         <form action="#">Category: &nbsp;
                             <select name="category" id="category">
                                 <option value="none">None</option>
-                                <option value="work">Work</option>
-                                <option value="personal">Personal</option>
-                                <option value="school">School</option>
+                                <option value="work">Work <WorkIcon/></option>
+                                <option value="personal">Personal <PersonIcon/></option>
+                                <option value="school">School <SchoolIcon/></option>
                                 <option value="other">Other</option>
                             </select>
                         </form>
@@ -273,6 +278,9 @@ class ToDoApp extends React.Component {
                             <label className={item.done ? "done" : ""}>
                                 {item.text} {item.dueDate ? `(Due on: ${item.dueDate})` : ""}
                                 {item.category ? `(Category: ${item.category})` : ""}
+                                {item.category === 'work' && <WorkIcon/>}
+                                {item.category === 'personal' && <PersonIcon/>}
+                                {item.category === 'school' && <SchoolIcon/>}
                             </label>
                             <img
                                 id="edit"
