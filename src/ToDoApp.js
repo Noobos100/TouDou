@@ -10,7 +10,8 @@ class ToDoApp extends React.Component {
         this.state = {
             items: [],
             newTaskText: "",
-            showAddPostModal: false
+            showAddPostModal: false,
+            hideDoneTasks: false
         };
         this.addTask = this.addTask.bind(this);
     }
@@ -185,11 +186,36 @@ class ToDoApp extends React.Component {
         this.setState({showAddPostModal: false});
     };
 
+    // Shows or hides tasks that are done
+    toggleDoneTasksVisibility = () => {
+        this.setState(prevState => ({hideDoneTasks: !prevState.hideDoneTasks}));
+    }
+
+    // starts searching once at least 3 characters are entered
+    // shows all tasks if search bar is empty
+    searchTaskName = (searchText) => {
+        if (searchText.length >= 3) {
+            this.setState(prevState => ({
+                items: prevState.items.map(item => {
+                    if (item.text.toLowerCase().includes(searchText.toLowerCase())) {
+                        return {...item, hidden: false};
+                    }
+                    return {...item, hidden: true};
+                })
+            }));
+        } else {
+            this.setState(prevState => ({
+                items: prevState.items.map(item => ({...item, hidden: false}))
+            }));
+        }
+    }
+
     // TODO: clean up structure (move functions to separate file)
     // TODO: add search bar
     render() {
         const nbTasks = this.countTasks();
-        const {newTaskText, showAddPostModal} = this.state;
+        const {newTaskText, showAddPostModal, hideDoneTasks} = this.state;
+        const visibleItems = hideDoneTasks ? this.state.items.filter((item) => !item.done) : this.state.items;
         return (
             <div className="App">
                 <Header nbTasks={nbTasks}/>
@@ -221,7 +247,8 @@ class ToDoApp extends React.Component {
                 <br></br>
                 <button onClick={this.saveToLocalStorage}>Save Tasks</button>
                 <br></br>
-                <input type="button" id="deletetasks" value="Delete All Tasks" onClick={() => this.removeAllTasks()}/>
+                <input type="button" id="deletetasks" value="Delete All Tasks"
+                       onClick={() => this.removeAllTasks()}/>
                 <br></br>
                 <select name="sort" id="sort" onChange={(e) => this.sortTasks(e.target.value)}>
                     <option value="">Sort by...</option>
@@ -232,9 +259,17 @@ class ToDoApp extends React.Component {
                     <option value="categoryAsc">Category (A-Z)</option>
                     <option value="categoryDesc">Category (Z-A)</option>
                 </select>
-
+                <br></br>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={hideDoneTasks}
+                        onChange={this.toggleDoneTasksVisibility}
+                    />
+                    {hideDoneTasks ? "Show Done Tasks" : "Hide Done Tasks"}
+                </label>
                 <ol>
-                    {this.state.items.map((item, index) => (
+                    {visibleItems.map((item, index) => (
                         <li key={index}>
                             <input
                                 type="checkbox"
@@ -266,7 +301,7 @@ class ToDoApp extends React.Component {
                         </li>
                     ))}
                 </ol>
-                <Footer openAddPostModal={this.openAddPostModal} search={this.search}/>
+                <Footer openAddPostModal={this.openAddPostModal} search={this.searchTaskName}/>
             </div>
         );
     }
