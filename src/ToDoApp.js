@@ -194,28 +194,22 @@ class ToDoApp extends React.Component {
     // starts searching once at least 3 characters are entered
     // shows all tasks if search bar is empty
     searchTaskName = (searchText) => {
-        if (searchText.length >= 3) {
-            this.setState(prevState => ({
-                items: prevState.items.map(item => {
-                    if (item.text.toLowerCase().includes(searchText.toLowerCase())) {
-                        return {...item, hidden: false};
-                    }
-                    return {...item, hidden: true};
-                })
-            }));
-        } else {
-            this.setState(prevState => ({
-                items: prevState.items.map(item => ({...item, hidden: false}))
-            }));
+        if (searchText.length < 3) {
+            this.setState({searchedItems: []});
+            return;
         }
+        const items = this.state.items;
+        const searchedItems = items.filter(item => item.text.toLowerCase().includes(searchText.toLowerCase()));
+        this.setState({searchedItems});
     }
 
     // TODO: clean up structure (move functions to separate file)
     // TODO: add search bar
     render() {
         const nbTasks = this.countTasks();
-        const {newTaskText, showAddPostModal, hideDoneTasks} = this.state;
-        const visibleItems = hideDoneTasks ? this.state.items.filter((item) => !item.done) : this.state.items;
+        const {newTaskText, showAddPostModal, hideDoneTasks, searchedItems} = this.state;
+        const itemsToDisplay = searchedItems && searchedItems.length > 0 ? searchedItems : this.state.items;
+        const visibleItems = itemsToDisplay.filter(item => hideDoneTasks ? !item.done : true);
         return (
             <div className="App">
                 <Header nbTasks={nbTasks}/>

@@ -6,10 +6,7 @@ function Footer({ openAddPostModal, search }) {
     };
 
     const handleSearch = (event) => {
-        // if input size > 3, call search function
-        if (event.target.value.length > 3) {
-            search(event.target.value);
-        }
+        search(event.target.value);
     };
 
     return (
